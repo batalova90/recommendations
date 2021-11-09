@@ -72,7 +72,7 @@ DATABASES = {
     }
 }
 prod_db = dj_database_url.config(conn_max_age=500)
-DATABASE['default'].update(prod_db)
+DATABASES['default'].update(prod_db)
 
 
 AUTH_PASSWORD_VALIDATORS = [
