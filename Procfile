@@ -1,1 +1,1 @@
-web: pipenv run python recommendations/manage.py runserver $PORT
+web: gunicorn recommendations.wsgi --log-file -
