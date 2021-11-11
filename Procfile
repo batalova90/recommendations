@@ -1,1 +1,1 @@
-web: gunicorn recommendations.wsgi --log-file -
+web: gunicorn /recomendations/recommendations.wsgi --log-file -
