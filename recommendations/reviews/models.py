@@ -27,6 +27,7 @@ class Categories(models.Model):
     name = models.CharField('Name of categories',
                             max_length=50,
                             unique=True)
+    slug = models.SlugField(unique=True)
 
     class Meta:
         verbose_name = 'Category'
@@ -47,14 +48,15 @@ class Creations(models.Model):
                                  on_delete=models.SET_NULL,
                                  null=True)
     rating = models.IntegerField(default=0)
-
+    slug = models.SlugField(unique=True)
+    
     class Meta:
         verbose_name = 'Creation'
         verbose_name_plural = 'Creations'
         ordering = ('id', )
 
     def __str__(self):
-        return self.name
+        return self.slug
 
 
 class CreationsGenres(models.Model):
@@ -72,6 +74,8 @@ class Authors(models.Model):
     
     class Meta:
         ordering = ('raiting', ) # ??? calculation???
+        verbose_name = 'Author'
+        verbose_name_plural = 'Authors'
     
     def __str__(self):
         return self.author.username

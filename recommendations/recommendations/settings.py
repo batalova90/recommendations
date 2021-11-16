@@ -12,6 +12,9 @@ SECRET_KEY = os.getenv('KEY')
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1','herokurecommendations.herokuapp.com']
 
+LOGIN_URL = '/auth/login'
+LOGIN_REDIRECT_URL = 'index'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -19,7 +22,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
     'reviews',
+    'about',
+    'sslserver',
 ]
 
 MIDDLEWARE = [
@@ -107,9 +113,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-PROJECT_ROOT = os.path.join(os.path.abspath(__file__))
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join('recommendations', 'static')
-#STATICFILES_DIR = (
-    #os.path.join(PROJECT_ROOT, 'static')
-#)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

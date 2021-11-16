@@ -1,0 +1,25 @@
+<div class="card"> 
+  <div class="card-body"> 
+    <div class="h2"> 
+       {{ author.get_full_name }}  
+       </div> 
+          <div class="h3 text-muted"> 
+             <a href=""> 
+               <strong class="d-block text-gray-dark">{{ author.get_username }}</strong> 
+             </a> 
+          </div> 
+        </div> 
+     <ul class="list-group list-group-flush"> 
+        <li class="list-group-item"> 
+           <div class="h6 text-muted"> 
+             <!--Подписчиков: {{ author.following.count|default_if_none:"no" }} <br> 
+                Подписан: {{ author.follower.count|default_if_none:"no" }}--!>
+           </div> 
+         </li> 
+          <li class="list-group-item"> 
+            <div class="h6 text-muted"> 
+            <!-- Количество записей --> 
+              Записей: {{ count }} 
+            </div> 
+          </li> 
+        </ul> 

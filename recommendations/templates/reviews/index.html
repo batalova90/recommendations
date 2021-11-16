@@ -1,6 +1,12 @@
-<!doctype html>
-<html>
-   <body>
-      <h1> "МОЯ СЛАДЕНЬКАЯ ЖОПОНЬКА!"</h1>
-   </body>
-</html>
+{% extends "base.html" %}
+{% block title %}Последние обзоры{% endblock %}
+{% block header %}Последние обзоры{% endblock %}
+
+{% block content %}
+  <div class="container">
+     {% for review in page %}
+         {% include "reviews/review_item.html" with review=review %}
+     {% endfor %}
+    {% include "includes/paginator.html" %}
+  </div>
+{% endblock %}

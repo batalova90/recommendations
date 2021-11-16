@@ -1,0 +1,13 @@
+<nav class="navbar navbar-light" style="background-color: #e6e6fa;">
+   <a class="navbar-brand" href="{% url 'index' %}"><span style="color:blue">Re</span><span style="color:orage">commendations</span></a>
+ <nav class="my-2 my-md-0 mr-md-3">
+   {% if user.is_authenticated %}
+   Пользователь: {{ user }}.
+   <a class="p-2 text-dark" href="{% url 'new_review' %}">Создать новый обзор</a>
+   <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+   {% else %}
+     <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
+     <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
+   {% endif %}
+ </nav>
+</nav>

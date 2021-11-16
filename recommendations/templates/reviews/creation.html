@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Обзоры: {{ creation }} {% endblock %} | Yatube
+{% block header %} {{ creation.name }} {% endblock %}
+{% block content %}
+  
+  <div class="container">
+     {% for review in page%}
+       {% include "reviews/review_item.html" with review=review %} 
+     {% endfor%}
+  </div>
+
+  {% include "includes/paginator.html" %}
+{% endblock %}
