@@ -2,6 +2,9 @@ import textwrap
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
 
 
 User = get_user_model()
@@ -41,13 +44,16 @@ class Categories(models.Model):
 class Creations(models.Model):
     name = models.CharField('Name of titles',
                             max_length=200)
-    genre = models.ManyToManyField(Genres,
-                                   through='CreationsGenres')
+    #genre = models.ManyToManyField(Genres,
+                                   #null=True,
+                                   #through='CreationsGenres')
     category = models.ForeignKey(Categories,
                                  related_name='categories',
                                  on_delete=models.SET_NULL,
                                  null=True)
-    rating = models.IntegerField(default=0)
+    rating = models.PositiveSmallIntegerField(default=0,
+                                              validators=[MinValueValidator(1),
+                                                          MaxValueValidator(10)])
     slug = models.SlugField(unique=True)
     
     class Meta:
@@ -70,7 +76,7 @@ class CreationsGenres(models.Model):
 class Authors(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='raiting')
-    raiting = models.IntegerField(default=0)
+    raiting = models.IntegerField(default=0, null=True)
     
     class Meta:
         ordering = ('raiting', ) # ??? calculation???
@@ -81,7 +87,6 @@ class Authors(models.Model):
         return self.author.username
 
 class Reviews(models.Model):
-    raiting = models.IntegerField(default=0)
     author = models.ForeignKey(Authors,
                                on_delete=models.CASCADE,
                                related_name='reviews')
@@ -92,13 +97,16 @@ class Reviews(models.Model):
     pub_date = models.DateTimeField("Date published",
                                     auto_now_add=True)
     text = models.TextField()
-    
-    # image!!!
+    search_vector = SearchVectorField(blank=True,null=True)
+    #raiting = models.PositiveSmallIntegerField(validators=[MinValueValidator(1),
+                                                           #MaxValueValidator(5)])
+    #image = models.ImageField('Picture')
 
     class Meta:
         verbose_name = 'Review'
         verbose_name_plural = 'Reviews'
         ordering = ('-pub_date',)
+        indexes = [GinIndex(fields=['search_vector'])]
 
     def __str__(self):
         cropped_text = textwrap.shorten(
@@ -107,6 +115,19 @@ class Reviews(models.Model):
                 placeholder='...'
         )
         return f'{self.name} {cropped_text}' 
+
+
+class RaitingReview(models.Model):
+    review = models.ForeignKey(Reviews, on_delete=models.CASCADE,
+                               related_name='raiting_add')
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='raiting_add')
+    raiting = models.PositiveSmallIntegerField(validators=[MinValueValidator(1),
+                                                           MaxValueValidator(5)])
+    
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user','review'],
+                                               name='unique_raiting')]
 
 
 class Comment(models.Model):

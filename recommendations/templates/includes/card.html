@@ -1,11 +1,11 @@
 <div class="card"> 
   <div class="card-body"> 
-    <div class="h2"> 
-       {{ author.get_full_name }}  
+    <div class="h4"> 
+       {{ author.get_short_name }}  
        </div> 
-          <div class="h3 text-muted"> 
+          <div class="h4 text-muted"> 
              <a href=""> 
-               <strong class="d-block text-gray-dark">{{ author.get_username }}</strong> 
+               <strong class="d-block text-gray-dark">@{{ author }}</strong>
              </a> 
           </div> 
         </div> 
@@ -18,8 +18,7 @@
          </li> 
           <li class="list-group-item"> 
             <div class="h6 text-muted"> 
-            <!-- Количество записей --> 
-              Записей: {{ count }} 
+            <!--рейтинг автора--!>
             </div> 
           </li> 
         </ul> 

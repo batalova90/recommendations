@@ -12,8 +12,14 @@
             </div>
           {% endfor %}
 
+          {% for error in review_form %}
+            <div class="alert alert-danegr" role="alert">
+               {{ error }}
+            </div>
+          {% endfor %}
+
           {% if reviews %}
-            <form method="post" enctype="multipart/form-data" action="{% url 'review_edit' author review_id %}">
+            <form method="post" enctype="multipart/form-data" action="{% url 'review_edit' request.user review.id %}">
           {% else%}
             <form method="post" enctype="multipart/form-data" action="{% url 'new_review'%}">
           {% endif %}

@@ -1,15 +1,15 @@
 from django.forms import ModelForm, Textarea
-
-from .models import Reviews, Comment, Creations
+from django import forms
+from django_bootstrap_datetimepicker.widgets import BootstrapDateTimeInput
+from .models import Reviews, Comment, Creations, RaitingReview
 
 
 class ReviewForm(ModelForm):
     class Meta:
         model = Reviews
         fields = ['text', 'name']
-        labels = {'text': 'Текст обзора',
-                  'name': 'Название обзора',
-                  'creation': 'Произведение'}
+        labels = {'text': 'Текст',
+                  'name': 'Название обзора',}
         help_texts = {'text': 'Введите текст обзора',
                       'name': 'Введите название обзора',}
 
@@ -17,10 +17,13 @@ class ReviewForm(ModelForm):
 class CreationForm(ModelForm):
     class Meta:
         model = Creations
-        fields = ['name', 'genre', 'category']
+        fields = ['name', 'rating', 'category', 'slug']
         labels = {'name': 'Название произведения',
-                  'genre': 'Жанр',
-                  'category': 'Категория'}
+                  'rating': 'Рэйтинг',
+                  'category': 'Категория',
+                  'slug': 'slug'}
+        help_texts = {'name': 'Введите название произведения',
+                      'slug': 'Введите slug'}
 
 
 class CommentForm(ModelForm):
@@ -29,3 +32,16 @@ class CommentForm(ModelForm):
         fields = ['text',]
         labels = {'text': 'Текст комментария', }
         widget = {'text': Textarea(attrs={'class': 'form-control'}), }
+
+
+class RaitingReviewForm(ModelForm):
+    RAITING = ['1', '2', '3', '4', '5']
+    class Meta:
+        model = RaitingReview
+        fields = ['raiting',]
+        #widget = {'raiting': forms.ChoiceField(widget=forms.RadioSelect, choices=RAITING)}
+        widgets = {'raiting': forms.NumberInput(attrs={'max': '5',})}
+
+class SearchForm(forms.Form):
+    query = forms.CharField()
+    labels = {query: 'Искать'}
