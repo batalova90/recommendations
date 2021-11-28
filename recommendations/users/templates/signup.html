@@ -8,11 +8,6 @@
         <div class="card-header">Зарегистрироваться</div>
         <div class="card-body">
 
-          {% for error in form.errors %}
-            <div class="alert alert-danger" role="alert">
-              {{ error }}
-            </div>
-          {% endfor %}
 
           <form method="post" action="{% url 'signup' %}">
             {% csrf_token %}
@@ -38,8 +33,11 @@
                 </div>
               </div>
             {% endfor %}
-
             <div class="col-md-6 offset-md-4">
+            {% load socialaccount %}
+            <a href="{% provider_login_url 'facebook' %}"
+               class="btn btn-block btn-primary btn-lg">Login With FB</a>
+            <p></p>
               <button type="submit" class="btn btn-primary">
                 Зарегистрироваться
               </button>

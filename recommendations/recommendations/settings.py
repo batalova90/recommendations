@@ -12,8 +12,9 @@ SECRET_KEY = os.getenv('KEY')
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1','herokurecommendations.herokuapp.com']
 
-LOGIN_URL = '/auth/login'
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = '/accounts/'
+LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,12 +24,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap_datetimepicker',
+    'django.contrib.sites',
     'users',
     'reviews',
     'about',
     'sslserver',
     'sorl.thumbnail',
+    'allauth',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google'
 ]
+
+
+SITE_ID = 3 
+SOCIAL_AUTH_FACEBOOK_KEY=os.getenv('FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET=os.getenv('FACEBOOK_SECRET')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -62,6 +73,13 @@ TEMPLATES = [
         },
     },
 ]
+
+
+AUTHENTICATED_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+
 
 WSGI_APPLICATION = 'recommendations.wsgi.application'
 
