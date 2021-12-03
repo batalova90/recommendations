@@ -12,6 +12,10 @@ SECRET_KEY = os.getenv('KEY')
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1','herokurecommendations.herokuapp.com']
 
+LOGIN_URL = '/accounts/'
+LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -19,8 +23,42 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_bootstrap_datetimepicker',
+    'django.contrib.sites',
+    'users',
     'reviews',
+    'about',
+    'sslserver',
+    'sorl.thumbnail',
+    'allauth',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google'
 ]
+
+
+SITE_ID = 3 
+SOCIAL_AUTH_FACEBOOK_KEY=os.getenv('FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET=os.getenv('FACEBOOK_SECRET')
+
+SOCIALACOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+                'profile',
+                'email'
+            ],
+        'AUTH_PARAMS': {
+                'access_type': 'online',
+        }
+    }
+
+}
+
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,6 +92,15 @@ TEMPLATES = [
         },
     },
 ]
+
+
+AUTHENTICATED_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+
+
+
 
 WSGI_APPLICATION = 'recommendations.wsgi.application'
 
@@ -104,12 +151,11 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-PROJECT_ROOT = os.path.join(os.path.abspath(__file__))
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join('recommendations', 'static')
-#STATICFILES_DIR = (
-    #os.path.join(PROJECT_ROOT, 'static')
-#)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'staticfiles/'),
+)

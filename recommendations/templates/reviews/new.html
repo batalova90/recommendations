@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ operation }}{% endblock %}
+{% block content %}
+
+  <div class="row justify-content-center">
+    <div class="col-md-8 p-5">
+      <div class="card">
+         <div class="card-header">{{ operation }}</div>
+         {% for error in creation_form.errors %}
+            <div class="alert alert-danger" role="alert">
+              {{ error }}
+            </div>
+          {% endfor %}
+
+          {% if reviews %}
+            <form method="post" enctype="multipart/form-data" action="{% url 'review_edit' author review_id %}">
+          {% else%}
+            <form method="post" enctype="multipart/form-data" action="{% url 'new_review'%}">
+          {% endif %}
+              
+          {% csrf_token %}
+              <!--форма произведения--!>
+              {% for field in creation_form %}
+                <div class="form-group row" aria-required={{ field.field.required }}>
+                  <label
+                     for="{{ field.id_for_label }}"
+                     class="col-md-4 col-form-label text-md-right">
+                     {{ field.label }}
+                     {% if field.field.required %}
+                       <span class="required">*</span>
+                     {% endif %}
+                  </label>
+                  <div class="col-md-6">
+                    {{ field }}
+                  </div>
+                </div>
+                {% endfor %}
+              <!--форма обзора--!>
+               {% for field in review_form %}
+                <div class="form-group row" aria-required={{ field.field.required }}>
+                  <label
+                    for="{{ field.id_for_label }}"
+                    class="col-md-4 col-form-label text-md-right">
+                    {{ field.label }}
+                    {% if field.field.required %}
+                      <span class="required">*</span>
+                    {% endif %}
+                  </label>
+                  <div class="col-md-6">
+                    {{ field }}
+                  </div>
+                </div>
+               {% endfor %}
+             <div class="col-md-6 offset-md-4">
+              <button type="submit" class="btn btn-primary">
+                 {{ add_or_save }}
+              </button>
+            </div>
+          </form>
+        </div> 
+      </div> 
+    </div> 
+  </div>
+
+{% endblock %}

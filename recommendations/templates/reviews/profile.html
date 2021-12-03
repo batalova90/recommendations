@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<main role="main" class="container">
+  <div class="row">
+    <div class="col-md-3 mb-3 mt-1">
+       {% include "includes/card.html" with author=author rating_author=rating_author %} 
+    </div>
+  </div>
+    
+    <div class="col-md-9">
+      <div class="container">
+         {% for review in page %}
+           {% include "reviews/review_item.html" with review=review %}
+         {% endfor %}
+      </div>
+      {% include "includes/paginator.html" %}
+      </div>
+</main>
+{% endblock %}

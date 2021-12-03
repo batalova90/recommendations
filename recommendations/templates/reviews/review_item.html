@@ -1,0 +1,40 @@
+<div class="card mb-3 mt-1 shadow-sm">
+   <div class="card-body">
+    <p class="card-text">
+      <a name="review_{{ review.id }}" href="{% url 'profile' review.author.author %}">
+        <strong class="d-block text-gray-dark">@{{ review.author }}</strong>
+      </a>
+      
+      <h3>
+            <a href="{% url 'review_view' review.author.author review.id %}">
+               <small class="text-muted">{{ review.name }}</small></a>
+      </h3>
+            {% if view %}
+      <h4>
+            <p>
+            <small class="text-muted">Рейтинг: {{ raiting|default_if_none:"0" }} (проголосовало: {{count_scores|default_if_none:"0"}})</small>
+            </p>
+            <small class="text-muted">
+      </h4>
+            {% endif %}
+         <a name="creation {{ review.creation }}" href="{% url 'creation' review.creation.slug %}">
+            <strong class="d-block text-gray-dark">{{ review.creation.name }}</strong>
+      </a>
+      {{ review.text|linebreaksbr }}
+    </p>
+      {% if user.is_authenticated %}
+        {% if review.comments.exists %}
+          <div>
+             Комментариев: {{ review.comments.count }}
+          </div>
+        {% endif %}
+      {% endif %}
+        <!-- Ссылка на редактирование поста для автора -->
+        {% if user == review.author.author or user.is_staff %}
+          <a class="btn btn-sm btn-info"
+             href="{% url 'review_edit' review.author.author.username review.id %}" role="button">
+            Редактировать </a>
+        {% endif %}
+      <small class="text-muted">{{ review.pub_date|date:"d M Y" }}</small>
+    </div>
+</div>

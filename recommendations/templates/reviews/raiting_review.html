@@ -1,0 +1,30 @@
+{% load static %}
+<div class="card my-4">
+   <form method="get" enctype="multipart/form-data" action="{% url 'add_review_raiting' review.author.author.username review.id %}">
+    <div class="form__item">
+       <div class="card-body">
+         <div class="form__label">Проголосовать</div>
+         <div class="raiting">
+            <form="." method="get">
+            <div class="raiting__items">
+              <input id="raiting_5" type="radio" class="raiting__item" value="5" name="raiting">
+              <label for="raiting_5" class="raiting__label"></label>
+              <input type="radio" id="raiting_4" class="raiting__item" value="4" name="raiting">
+              <label for="raiting_4" class="raiting__label"></label>
+              <input type="radio" id="raiting_3" class="raiting__item" value="3" name="raiting">
+              <label for="raiting_3" class="raiting__label"></label>
+              <input type="radio" id="raiting_2" checked class="raiting__item" value="2" name="raiting">
+              <label for="raiting_2" class="raiting__label"></label>
+              <input type="radio" id="raiting_1" class="raiting__item" value="1" name="raiting">
+              <label for="raiting_1" class="raiting__label"></label>
+           </div>
+           </form>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">
+           Проголосовать</button>
+     </div>
+     </div>
+     </div>
+   </div>
+</form>
+</div>

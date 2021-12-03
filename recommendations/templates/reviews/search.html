@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+{% block title%}Поиск{% endblock %}
+{%block header%}{% endblock %}
+{% block content %}
+   {% if 'query' in request.GET %}
+      <p class="text-secondary">Запрос "{{ query }}"</p>
+      <p class="text-secondary">Найдено {{ total }}</p>
+      {% for res in result %}
+      <div class="card-body">
+         <p class="card-text">
+          <a href="{% url 'review_view' res.author.author res.id %}">
+             <strong class="d-block text-gray-dark">{{ res.name }}</strong></a>
+          {{ res|linebreaksbr }}
+         </p>
+      </div>
+        {% empty %}
+        <p>Совпадений не найдено</p>
+      {% endfor %}
+   {% endif %}
+{% endblock %}

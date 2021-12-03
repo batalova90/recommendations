@@ -1,0 +1,18 @@
+{% load user_filters %}
+{% if user.is_authenticated %}
+   <div class="card my-4">
+      <form method="post" enctype="multipart/form-data"
+       action="{% url 'add_review_raiting_with_form' review.author.author.username review.id %}">
+         {% csrf_token %}
+      <h5 class-"card-header"> Проголосовать </h5>
+      <div class="card-body">
+         <div class="form-group">
+            {% for field in form %}
+               {{ field }}
+            {% endfor %}
+         </div>
+          <button type="submit" class="btn btn-primary">Проголосовать</button>
+      </div>
+      </form>
+   </div>
+{% endif %}
