@@ -15,13 +15,6 @@
       </div>
         {% empty %}
         <p>Совпадений не найдено</p>
-      
       {% endfor %}
-   {% else %}
-      <h1>Поиск обзора</h1>
-        <form action="." method="get">
-           {{ form.as_p }}
-           <input type="submit" class="btn btn-primary" value="Искать">
-       </form>
    {% endif %}
 {% endblock %}

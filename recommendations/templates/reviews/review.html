@@ -6,11 +6,14 @@
 <main role="main" class="container">
    <div class="row">
       <div class="col-md-3 mb-3 mt-1">
-         {% include "includes/card.html" with author=author %}
+         {% include "includes/card.html" with author=author rating_author=rating_author %}
       </div>
    </div>
      <div class="col-md-9">
         {% include "reviews/review_item.html" with review=review %}
+        {% if user.is_authenticated %}
+          {% include "reviews/raiting_review.html" %}
+        {% endif %}
         {% include "reviews/comments.html" with comments=comments %}
      </div>
 </main>

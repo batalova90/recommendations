@@ -41,6 +41,25 @@ SITE_ID = 3
 SOCIAL_AUTH_FACEBOOK_KEY=os.getenv('FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET=os.getenv('FACEBOOK_SECRET')
 
+SOCIALACOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+                'profile',
+                'email'
+            ],
+        'AUTH_PARAMS': {
+                'access_type': 'online',
+        }
+    }
+
+}
+
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -79,6 +98,8 @@ AUTHENTICATED_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 )
+
+
 
 
 WSGI_APPLICATION = 'recommendations.wsgi.application'
@@ -135,8 +156,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIR = (
-    os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'staticfiles/'),
 )
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

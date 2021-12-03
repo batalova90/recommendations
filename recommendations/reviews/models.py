@@ -76,10 +76,11 @@ class CreationsGenres(models.Model):
 class Authors(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='raiting')
-    raiting = models.IntegerField(default=0, null=True)
-    
+    sum_of_rating = models.IntegerField(default=0, null=True)
+    number_of_rating = models.IntegerField(default=0, null=True)
+    rating = models.FloatField(default=0, null=True)    
     class Meta:
-        ordering = ('raiting', ) # ??? calculation???
+        ordering = ('author',)
         verbose_name = 'Author'
         verbose_name_plural = 'Authors'
     

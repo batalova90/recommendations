@@ -30,6 +30,10 @@ MANIFEST
 # keys
 .env
 env/
+/recommendations/static/
+.recommendations/static/*
+.static/*
+static/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

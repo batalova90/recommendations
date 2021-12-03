@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django.db.models import Avg
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
 from .models import Reviews, Categories, Genres, Creations, Authors, User, Comment, RaitingReview
 from .forms import ReviewForm, CommentForm, CreationForm, RaitingReviewForm, SearchForm
@@ -72,7 +73,12 @@ def review_view(request, username, review_id):
     comments = Comment.objects.filter(review__id=review_id)
     scores = review.raiting_add.all()
     raiting = scores.aggregate(Avg('raiting')).get('raiting__avg')
-    
+    try:
+        rating_author = review.author.sum_of_rating / review.author.number_of_rating
+        review.author.rating = rating_author
+        review.author.save()
+    except ZeroDivisionError:
+        rating_author = 0
     return render(request, 'reviews/review.html',
                   {'author': review.author.author,
                    'review': review,
@@ -81,7 +87,8 @@ def review_view(request, username, review_id):
                    'count_scores': scores.count,
                    'form': form,
                    'comments': comments,
-                   'view': True})
+                   'rating_author': rating_author,
+                   'view': True,})
 
 
 @login_required()
@@ -125,14 +132,24 @@ def review_edit(request, username, review_id):
 
 
 def profile(request, username):
-    reviews = Reviews.objects.filter(author__author__username=username)
+    #коряво тут!!!!!!! надо ревью убрать, через автора делать и проверка на get_or_404
+    author = get_object_or_404(Authors, author__username=username)
+    reviews = author.reviews.all()
+    try:
+        rating_author = author.sum_of_rating / author.number_of_rating
+        author.rating = rating_author
+        author.save()
+    except ZeroDivisionError:
+        raiting_author = 0
     if len(reviews) != 0:
         paginator = Paginator(reviews, 8)
         page = get_page(request, paginator)
         return render(request, 'reviews/profile.html',
                       {'author': username, 'page': page,
-                      'count':  reviews.count})
+                       'count':  reviews.count,
+                       'rating_author': rating_author,})
     return redirect('index')
+
 
 def add_comment(request, username, review_id):
     review = get_object_or_404(Reviews, id=review_id)
@@ -164,21 +181,32 @@ def creation(request, slug='1'):
     return render(request, 'reviews/creation.html', 
                   {'creation': creation, 'page': page})
 
+
 @login_required()
-def add_raiting_review(request, username, review_id, score):
-    #raiting_review = RaitingReview.objects.filter(user=request.user,
-                                                  #review.id=review_id)
-    review = get_object_or_404(Reviews,
-                               id=review_id,
-                               author__author__username=username)
-    if review.raiting_add.filter(user=request.user).exists():
+def add_review_raiting(request, username, review_id):
+    if 'raiting' in  request.GET:
+        author = get_object_or_404(Authors,
+                                   author__username=username)
+        #клю ревью не проверен на существование
+        review = author.reviews.get(id=review_id)
+        if author.author == request.user:
+            return redirect(review_view, username, review_id)
+        score = request.GET['raiting']
+        try:
+            raiting_review, created = RaitingReview.objects.get_or_create(user=request.user,
+                                                                          review=review,
+                                                                          raiting=score)
+        except IntegrityError:
+            return redirect(review_view, username, review_id)
+
+        if created:
+            raiting_review.save()
+            author.sum_of_rating += int(score)
+            author.number_of_rating += 1
+            author.rating = author.sum_of_rating / author.number_of_rating
+            author.rating = round(author.rating, 3)
+            author.save()
         return redirect(review_view, username, review_id)
-    if review.author.author == request.user:
-        return redirect(review_view, username, review_id)
-    raiting_review = RaitingReview.objects.create(user=request.user,
-                                                  review=review,
-                                                  raiting=score)
-    raiting_review.save()
     return redirect(review_view, username, review_id)
 
 
@@ -198,3 +226,11 @@ def review_search(request):
                    'query': query,
                    'result': result,
                    'total':total})
+
+
+
+def top_authors(request):
+    authors = Authors.objects.order_by('-rating')[:10].all()
+    return render(request, 'reviews/top_authors.html',
+                  {'authors': authors,})
+

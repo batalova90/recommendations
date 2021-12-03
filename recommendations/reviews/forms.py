@@ -34,14 +34,14 @@ class CommentForm(ModelForm):
         widget = {'text': Textarea(attrs={'class': 'form-control'}), }
 
 
-class RaitingReviewForm(ModelForm):
-    RAITING = ['1', '2', '3', '4', '5']
+class RaitingReviewForm(forms.ModelForm):
     class Meta:
         model = RaitingReview
         fields = ['raiting',]
         #widget = {'raiting': forms.ChoiceField(widget=forms.RadioSelect, choices=RAITING)}
-        widgets = {'raiting': forms.NumberInput(attrs={'max': '5',})}
+        #widgets = {'raiting': forms.NumberInput(attrs={'max': '5', 'class': 'form-control'})}
 
 class SearchForm(forms.Form):
     query = forms.CharField()
-    labels = {query: 'Искать'}
+    class Meta:
+        labels = {'query': 'Искать'}

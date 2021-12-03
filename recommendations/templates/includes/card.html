@@ -6,9 +6,9 @@
           <div class="h4 text-muted"> 
              <a href=""> 
                <strong class="d-block text-gray-dark">@{{ author }}</strong>
-             </a> 
-          </div> 
-        </div> 
+             </a>
+          </div>
+        </div>
      <ul class="list-group list-group-flush"> 
         <li class="list-group-item"> 
            <div class="h6 text-muted"> 
@@ -17,8 +17,8 @@
            </div> 
          </li> 
           <li class="list-group-item"> 
-            <div class="h6 text-muted"> 
-            <!--рейтинг автора--!>
-            </div> 
+            <div class="h6 text-muted">
+               Рейтинг: {{ rating_author|default_if_none:"0" }} 
+            </div>
           </li> 
         </ul> 

@@ -16,7 +16,8 @@ urlpatterns = [
     path('search/', views.review_search, name='search'),
     path('<str:username>/', views.profile, name='profile'),
     path('creation/<str:slug>', views.creation, name='creation'),
-    path('review/<str:username>/<int:review_id>/add_raiting/<int:score>',
-         views.add_raiting_review,
-         name='add_raiting_review'),
+    path('review/<str:username>/<int:review_id>/add_raiting/',
+         views.add_review_raiting,
+         name='add_review_raiting'),
+    path('top_10/authors', views.top_authors, name="top_10_authors"),
 ]
