@@ -135,6 +135,7 @@ def profile(request, username):
     #коряво тут!!!!!!! надо ревью убрать, через автора делать и проверка на get_or_404
     author = get_object_or_404(Authors, author__username=username)
     reviews = author.reviews.all()
+    rating_author = 0
     try:
         rating_author = author.sum_of_rating / author.number_of_rating
         author.rating = rating_author
