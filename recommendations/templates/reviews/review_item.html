@@ -1,4 +1,6 @@
 <div class="card mb-3 mt-1 shadow-sm">
+   {% load cloudinary %}
+   {% cloudinary review.image format="jpg" width=960 height=500 crop="limit"%}
    <div class="card-body">
     <p class="card-text">
       <a name="review_{{ review.id }}" href="{% url 'profile' review.author.author %}">

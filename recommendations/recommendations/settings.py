@@ -1,6 +1,10 @@
 import os
 from dotenv import load_dotenv
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 load_dotenv()
 
@@ -33,7 +37,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
+    'cloudinary',
 ]
 
 
@@ -158,4 +163,14 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'staticfiles/'),
+)
+
+
+cloudinary.config(
+    cloud_name = os.getenv('CLOUD_NAME'),
+    api_key = os.getenv('CLOUD_KEY'),
+    api_secret = os.getenv('CLOUD_SECRET'),
+    secure = True
+
+
 )

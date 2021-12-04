@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import redirect
-from .models import Reviews, Genres, Categories, Creations, Authors, RaitingReview
+from .models import Reviews, Genres, Categories, Creations, Authors, RaitingReview, Pictures
 
 class ReviewsAdmin(admin.ModelAdmin):
     list_display = ('pk', 'author', 'name', 'creation')
@@ -35,7 +35,7 @@ class AuthorsAdmin(admin.ModelAdmin):
     
 
     def author_card(self, obj):
-        return redirect('profile', 'author')
+        return redirect('profile', 'author.author.username')
 
 
 class RaitingReviewAdmin(admin.ModelAdmin):
@@ -43,9 +43,12 @@ class RaitingReviewAdmin(admin.ModelAdmin):
     empty_value_display = ('-empty-')
 
 
+    
+
 admin.site.register(Reviews, ReviewsAdmin)
 admin.site.register(Genres, GenresAdmin)
 admin.site.register(Categories, CategoriesAdmin)
 admin.site.register(Creations, CreationsAdmin)
 admin.site.register(Authors, AuthorsAdmin)
 admin.site.register(RaitingReview, RaitingReviewAdmin)
+admin.site.register(Pictures)

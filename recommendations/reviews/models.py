@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
 
+from cloudinary.models import CloudinaryField
 
 User = get_user_model()
 
@@ -44,9 +45,6 @@ class Categories(models.Model):
 class Creations(models.Model):
     name = models.CharField('Name of titles',
                             max_length=200)
-    #genre = models.ManyToManyField(Genres,
-                                   #null=True,
-                                   #through='CreationsGenres')
     category = models.ForeignKey(Categories,
                                  related_name='categories',
                                  on_delete=models.SET_NULL,
@@ -79,6 +77,7 @@ class Authors(models.Model):
     sum_of_rating = models.IntegerField(default=0, null=True)
     number_of_rating = models.IntegerField(default=0, null=True)
     rating = models.FloatField(default=0, null=True)    
+    
     class Meta:
         ordering = ('author',)
         verbose_name = 'Author'
@@ -86,6 +85,15 @@ class Authors(models.Model):
     
     def __str__(self):
         return self.author.username
+
+
+class Pictures(models.Model):
+     image = CloudinaryField('image')
+
+     class Meta:
+         verbose_name = 'Picture'
+         verbose_name_plural = 'Pictures'
+
 
 class Reviews(models.Model):
     author = models.ForeignKey(Authors,
@@ -95,13 +103,15 @@ class Reviews(models.Model):
     creation = models.ForeignKey(Creations,
                                  on_delete=models.CASCADE,
                                  related_name='reviews')
+    image = CloudinaryField('image')
+    #pictures = models.ManyToManyField(Pictures,
+                                      #null=True,
+                                      #through='ReviewPicture')
     pub_date = models.DateTimeField("Date published",
                                     auto_now_add=True)
     text = models.TextField()
+    #text = models.RichTextField(blank=True, null=True)
     search_vector = SearchVectorField(blank=True,null=True)
-    #raiting = models.PositiveSmallIntegerField(validators=[MinValueValidator(1),
-                                                           #MaxValueValidator(5)])
-    #image = models.ImageField('Picture')
 
     class Meta:
         verbose_name = 'Review'
@@ -142,3 +152,12 @@ class Comment(models.Model):
 
     class Meat:
         ordering = ('created', )
+
+
+class ReviewPicture(models.Model):
+    review = models.ForeignKey(Reviews,
+                               on_delete=models.CASCADE,
+                               related_name='picture')
+    picture = models.ForeignKey(Pictures,
+                                on_delete=models.CASCADE)
+

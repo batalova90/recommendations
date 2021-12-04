@@ -8,6 +8,8 @@ from django.db.models import Avg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
+from cloudinary.forms import cl_init_js_callbacks
+
 from .models import Reviews, Categories, Genres, Creations, Authors, User, Comment, RaitingReview
 from .forms import ReviewForm, CommentForm, CreationForm, RaitingReviewForm, SearchForm
 
