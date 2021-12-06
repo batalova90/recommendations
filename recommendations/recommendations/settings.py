@@ -193,8 +193,8 @@ STATICFILES_DIRS = (
 
 
 cloudinary.config(
-    cloud_name = os.getenv('CLOUD_NAME'),
-    api_key = os.getenv('CLOUD_KEY'),
-    api_secret = os.getenv('CLOUD_SECRET'),
+    cloud_name = 'batalova'#os.getenv('CLOUD_NAME'),
+    api_key = '414962218493954'#os.getenv('CLOUD_KEY'),
+    api_secret = '2Hys98oUrRoa82oBcrezuJEhZYc'#os.getenv('CLOUD_SECRET'),
     secure = True
 )
