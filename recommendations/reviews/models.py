@@ -103,14 +103,15 @@ class Reviews(models.Model):
     creation = models.ForeignKey(Creations,
                                  on_delete=models.CASCADE,
                                  related_name='reviews')
-    image = CloudinaryField('image')
+    image = CloudinaryField('image',
+                            null=True)
     #pictures = models.ManyToManyField(Pictures,
                                       #null=True,
                                       #through='ReviewPicture')
     pub_date = models.DateTimeField("Date published",
                                     auto_now_add=True)
     text = models.TextField()
-    #text = models.RichTextField(blank=True, null=True)
+    #text = RichTextField()
     search_vector = SearchVectorField(blank=True,null=True)
 
     class Meta:

@@ -13,10 +13,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv('KEY')
 
-DEBUG = True
+DEBUG = True 
 ALLOWED_HOSTS = ['127.0.0.1','herokurecommendations.herokuapp.com']
 
-LOGIN_URL = '/accounts/'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap_datetimepicker',
     'django.contrib.sites',
+    'social_django',
     'users',
     'reviews',
     'about',
@@ -46,11 +48,14 @@ SITE_ID = 3
 SOCIAL_AUTH_FACEBOOK_KEY=os.getenv('FACEBOOK_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET=os.getenv('FACEBOOK_SECRET')
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_SECRET')
+
 SOCIALACOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
                 'profile',
-                'email'
+                'email',
             ],
         'AUTH_PARAMS': {
                 'access_type': 'online',
@@ -59,11 +64,17 @@ SOCIALACOUNT_PROVIDERS = {
 
 }
 
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.associate_by_email',
+)
+
+
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
-
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -93,6 +105,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.login_redirect',
+                'social_django.context_processors.backends',
             ],
         },
     },
@@ -100,14 +114,26 @@ TEMPLATES = [
 
 
 AUTHENTICATED_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.google.GooglePlusAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackends',
 )
 
 
 
 
 WSGI_APPLICATION = 'recommendations.wsgi.application'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+
+}
 
 
 # Database
@@ -171,6 +197,4 @@ cloudinary.config(
     api_key = os.getenv('CLOUD_KEY'),
     api_secret = os.getenv('CLOUD_SECRET'),
     secure = True
-
-
 )

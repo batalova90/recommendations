@@ -6,6 +6,8 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('new/', views.new_review, name='new_review'),
+    path('404/', views.page_not_found, name='404'),
+    path('500/', views.server_error, name='500'),
     path('<str:username>/<int:review_id>/edit/',
          views.review_edit,
          name='review_edit'),

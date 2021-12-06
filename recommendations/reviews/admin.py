@@ -31,12 +31,8 @@ class CreationsAdmin(admin.ModelAdmin):
 
 
 class AuthorsAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'author','sum_of_rating', 'number_of_rating', 'author_card')
+    list_display = ('pk', 'author','sum_of_rating', 'number_of_rating')
     
-
-    def author_card(self, obj):
-        return redirect('profile', 'author.author.username')
-
 
 class RaitingReviewAdmin(admin.ModelAdmin):
     list_display = ('pk', 'review', 'raiting', 'user')
