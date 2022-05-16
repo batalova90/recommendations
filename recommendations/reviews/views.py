@@ -7,6 +7,9 @@ from django.core.paginator import Paginator
 from django.db.models import Avg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
+from django.views.decorators.cache import cache_page
+
+from cloudinary.forms import cl_init_js_callbacks
 
 from .models import Reviews, Categories, Genres, Creations, Authors, User, Comment, RaitingReview
 from .forms import ReviewForm, CommentForm, CreationForm, RaitingReviewForm, SearchForm
@@ -19,6 +22,7 @@ def get_page(request, paginator):
     return paginator.get_page(page_number)
 
 
+@cache_page(60 * 5)
 def index(request):
     latest = Reviews.objects.all()
     paginator = Paginator(latest, 8) # убрать потом посты в settings
@@ -29,27 +33,31 @@ def index(request):
 @login_required()
 def new_review(request):
     if request.method != 'POST':
-        creation_formset = CreationForm()
-        review_formset = ReviewForm()
+        creation_formset = CreationForm(prefix='creation')
+        review_formset = ReviewForm(prefix='review')
         return render(request, 'reviews/new.html',
                 {'creation_form': creation_formset,
                  'review_form': review_formset,
                  'operation': 'Добавить обзор',
                  'add_or_save': 'Добавить',
                  'reviews': False})
-    creation_formset = CreationForm(request.POST or None,
-                                    files=request.FILES or None,
+    creation_formset = CreationForm(request.POST,
                                     prefix='creation')
-    review_formset = ReviewForm(request.POST or None,
-                                files=request.FILES or None,
+    review_formset = ReviewForm(request.POST,
+                                files=request.FILES,
                                 prefix='review')
+    print(creation_formset, '\n\n')
+    print(review_formset, '\n\n', 'review')
+    print(request.POST)
     if creation_formset.is_valid() and review_formset.is_valid():
         new_review = review_formset.save(commit=False)
         try:
             creation = Creations.objects.get(name=creation_formset.cleaned_data.get('name'),
                                              category__id=creation_formset.cleaned_data.get('category').id)
             new_review.creation = creation
+            print('есть произведение')
         except ObjectDoesNotExist:
+            print('нет произведения')
             new_creation = creation_formset.save()
             new_review.creation = new_creation
         author, created = Authors.objects.get_or_create(author=request.user)
@@ -132,7 +140,6 @@ def review_edit(request, username, review_id):
 
 
 def profile(request, username):
-    #коряво тут!!!!!!! надо ревью убрать, через автора делать и проверка на get_or_404
     author = get_object_or_404(Authors, author__username=username)
     reviews = author.reviews.all()
     rating_author = 0
@@ -176,9 +183,6 @@ def creation(request, slug='1'):
     reviews = creation.reviews.all()
     paginator = Paginator(reviews, 10)
     page = get_page(request, paginator)
-    # еще вот тут рейтинг не плохо посчитать
-    # значение вывести в шаблон
-    # в шаблон добавить карточку произведения с рейтингом
     return render(request, 'reviews/creation.html', 
                   {'creation': creation, 'page': page})
 
@@ -235,3 +239,13 @@ def top_authors(request):
     return render(request, 'reviews/top_authors.html',
                   {'authors': authors,})
 
+
+# обработка 404 и 500
+def page_not_found(request, exception):
+    return render(request, 'misc/404.html',
+                  {'path': request.path},
+                  status=404)
+
+
+def server_error(request):
+    return render(request, 'misc/500.html', status=500)

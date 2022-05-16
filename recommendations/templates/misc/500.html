@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Ошибка 500{% endblock %}
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-12">
+       <h1>Ошибка 500</h1>
+         <p class="lead">Ошибка на сервере, попробуйте обновить страницу или обратиться позже</p>
+         {% load cloudinary %}
+         <img class="card-img"
+         src="https://res.cloudinary.com/batalova/image/upload/v1638716354/404_error_ug8pq7.png"
+         alt="500">
+         <p class="lead"><a href="{% url 'index' %}">Вернуться на главную</a></p>
+    </div>
+  </div>
+
+{% endblock %}
+
