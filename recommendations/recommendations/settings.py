@@ -45,12 +45,13 @@ INSTALLED_APPS = [
 
 
 SITE_ID = 3 
-SOCIAL_AUTH_FACEBOOK_KEY=os.getenv('FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET=os.getenv('FACEBOOK_SECRET')
+SOCIAL_AUTH_FACEBOOK_KEY='873457569977531'#os.getenv('FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET='250d587edea361e759a058ab4b00cb0e'#os.getenv('FACEBOOK_SECRET')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_SECRET')
 
+"""
 SOCIALACOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
@@ -63,7 +64,7 @@ SOCIALACOUNT_PROVIDERS = {
     }
 
 }
-
+"""
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_by_email',
@@ -105,8 +106,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.login_redirect',
                 'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -116,10 +117,9 @@ TEMPLATES = [
 AUTHENTICATED_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
     'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.google.GoogleOAuth',
     'social_core.backends.google.GooglePlusAuth',
     'social_core.backends.facebook.FacebookOAuth2',
-    'django.contrib.auth.backends.ModelBackends',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 
@@ -136,8 +136,6 @@ CACHES = {
 }
 
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
