@@ -1,18 +1,9 @@
 import pytest
 from selenium.webdriver.common.by import By
 
-from application import Application
-
-
-@pytest.fixture
-def app(request):
-    fixture = Application()
-    request.addfinalizer(fixture.teardown_method)
-    return fixture
-
 
 def test_create_group(app):
-    app.login_admin(
+    app.session.login_admin(
             username="admin",
             password="admin"
     )
@@ -32,11 +23,11 @@ def test_create_group(app):
             By.NAME,
             "_save"
     ).click()
-    app.logout_admin()
+    app.session.logout_admin()
 
 
 def test_create_category(app):
-    app.login_admin(
+    app.session.login_admin(
             username="admin",
             password="admin"
     )
@@ -60,4 +51,4 @@ def test_create_category(app):
             By.NAME,
             "_save"
     ).click()
-    app.logout_admin()
+    app.session.logout_admin()
