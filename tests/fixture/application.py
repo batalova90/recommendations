@@ -3,6 +3,7 @@ from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 from .session import SessionHelper
+from enum_urls import EnumURL
 
 
 class Application:
@@ -18,12 +19,16 @@ class Application:
     
     def open_admin_panel(self):
         self.driver.get(
-                "http://127.0.0.1:8000/admin/login/?next=/admin/"
+                EnumURL.ADMIN_LOGIN.value
         )
-        self.driver.set_window_size(1022, 745)
 
     def open_homepage(self):
         self.driver.get(
-                "http://127.0.0.1:8000/"
+                EnumURL.HOMEPAGE.value
         )
         self.driver.set_window_size(1022, 745)
+
+    def open_logoutpage(self):
+        self.driver.get(
+                EnumURL.ADMIN_LOGOUT.value
+        )

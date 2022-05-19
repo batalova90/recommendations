@@ -38,7 +38,5 @@ class SessionHelper:
         ).click()
 
     def logout_admin(self):
-        self.app.driver.get(
-                "http://127.0.0.1:8000/admin/logout/"
-        )
+        self.app.open_logoutpage()
         self.app.open_homepage()
