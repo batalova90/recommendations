@@ -3,10 +3,7 @@ from selenium.webdriver.common.by import By
 
 
 def test_delete_group(app):
-    app.session.login_admin(
-            username="admin",
-            password="admin"
-    )
+    app.open_admin_panel()
     app.driver.find_element(
             By.LINK_TEXT,
             "Groups"
@@ -34,14 +31,10 @@ def test_delete_group(app):
             By.CSS_SELECTOR,
             "input:nth-child(4)"
     ).click()
-    app.session.logout_admin()
 
 
 def test_delete_category(app):
-    app.session.login_admin(
-            username="admin",
-            password="admin"
-    )
+    app.open_admin_panel()
     app.driver.find_element(
             By.LINK_TEXT,
             "Categories"
@@ -69,4 +62,3 @@ def test_delete_category(app):
             By.CSS_SELECTOR,
             "input:nth-child(4)"
     ).click()
-    app.session.logout_admin()

@@ -3,10 +3,7 @@ from selenium.webdriver.common.by import By
 
 
 def test_create_group(app):
-    app.session.login_admin(
-            username="admin",
-            password="admin"
-    )
+    app.open_admin_panel()
     app.driver.find_element(
             By.LINK_TEXT,
             "Groups"
@@ -23,14 +20,10 @@ def test_create_group(app):
             By.NAME,
             "_save"
     ).click()
-    app.session.logout_admin()
 
 
 def test_create_category(app):
-    app.session.login_admin(
-            username="admin",
-            password="admin"
-    )
+    app.open_admin_panel()
     app.driver.find_element(
             By.LINK_TEXT,
             "Categories"
@@ -51,4 +44,3 @@ def test_create_category(app):
             By.NAME,
             "_save"
     ).click()
-    app.session.logout_admin()

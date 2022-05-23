@@ -16,6 +16,13 @@ class Application:
 
     def teardown_method(self):
         self.driver.quit()
+
+    def is_valid(self):
+        try:
+            self.driver.current_url
+            return True
+        except:
+            return False
     
     def open_admin_panel(self):
         self.driver.get(

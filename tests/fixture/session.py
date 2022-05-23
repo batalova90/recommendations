@@ -37,6 +37,31 @@ class SessionHelper:
                 ".submit-row > input"
         ).click()
 
+    def is_logged_in_as(self, username):
+        return self.app.driver.find_element(
+                By.CSS_SELECTOR,
+                "strong"
+        ).text.lower() == username
+
+    def is_login(self):
+        try:
+            self.app.driver.find_element(By.CSS_SELECTOR, "a:nth-child(4)")
+            return True
+        except:
+            return False
+
+    def ensure_login_admin(self, username, password):
+        if self.is_login():
+            if self.is_logged_in_as(username):
+                return
+            else:
+                self.logout_admin()
+        self.login_admin(username, password)
+
+    def ensure_logout_admin(self):
+        if self.is_login():
+            self.logout_admin()
+
     def logout_admin(self):
         self.app.open_logoutpage()
         self.app.open_homepage()
