@@ -8,7 +8,6 @@ class SessionHelper:
         self.app = app
 
     def login_admin(self, username, password):
-        self.app.open_homepage()
         self.app.open_admin_panel()
         self.app.driver.find_element(
                 By.ID,

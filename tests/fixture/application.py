@@ -39,3 +39,15 @@ class Application:
         self.driver.get(
                 EnumURL.ADMIN_LOGOUT.value
         )
+
+    def open_groups_page(self):
+        if self.driver.current_url != EnumURL.GROUPS_PAGE.value:
+            self.driver.get(
+                    EnumURL.GROUPS_PAGE.value
+            )
+
+    def open_categories_page(self):
+        if self.driver.current_url != EnumURL.CATEGORIES_PAGE.value:
+            self.driver.get(
+                    EnumURL.CATEGORIES_PAGE.value
+            )
