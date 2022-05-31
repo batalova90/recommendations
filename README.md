@@ -33,4 +33,4 @@ python3 manage.py migrate
 python3 manage.py runserver
 ```
 
-## Добавлены функциональное тестирование с использованием pytest и Selenium
+## Добавлено тестирование с использованием pytest и Selenium
