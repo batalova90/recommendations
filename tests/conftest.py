@@ -7,13 +7,16 @@ fixture = None
 @pytest.fixture
 def app(request):
     global fixture
+    browser = request.config.getoption("--browser")
     if fixture is None:
-        fixture = Application()
+        fixture = Application(browser=browser)
     elif not fixture.is_valid():
-        fixture = Application()
+        fixture = Application(browser=browser)
+    username = request.config.getoption("--username")
+    password = request.config.getoption("--password")
     fixture.session.ensure_login_admin(
-            username="admin",
-            password="admin"
+            username=username,
+            password=password
     )
     return fixture
 
@@ -25,3 +28,8 @@ def destroy(request):
         fixture.teardown_method()
     request.addfinalizer(fin)
     return fixture
+
+def pytest_addoption(parser):
+    parser.addoption("--browser", action="store", default="firefox")
+    parser.addoption("--password", action="store", default="admin")
+    parser.addoption("--username", action="store", default="admin")

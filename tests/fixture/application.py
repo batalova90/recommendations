@@ -1,6 +1,6 @@
 import pytest
 from selenium import webdriver
-from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager import firefox, chrome # GeckoDriverManager
 
 from .session import SessionHelper
 from enum_urls import EnumURL
@@ -8,10 +8,17 @@ from enum_urls import EnumURL
 
 class Application:
 
-    def __init__(self):
-        self.driver = webdriver.Firefox(
-                executable_path=GeckoDriverManager().install()
-        )
+    def __init__(self, browser):
+        if browser == "firefox":
+            self.driver = webdriver.Firefox(
+                    executable_path=firefox.GeckoDriverManager().install()
+            )
+        elif browser == "chrome":
+            self.driver = webdriver.Chrome(
+                    executable_path=chrome.ChromeDriverManager().install()
+            )
+        else:
+            raise ValueError(f'Unrecognized browser {browser}')
         self.session = SessionHelper(self)
 
     def teardown_method(self):
