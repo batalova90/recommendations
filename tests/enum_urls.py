@@ -7,3 +7,4 @@ class EnumURL(enum.Enum):
     ADMIN_LOGOUT = "http://127.0.0.1:8000/admin/logout/"
     GROUPS_PAGE = "http://127.0.0.1:8000/admin/auth/group/"
     CATEGORIES_PAGE = "http://127.0.0.1:8000/admin/reviews/categories/"
+    NEW_REVIEW = "http://127.0.0.1:8000/new/"

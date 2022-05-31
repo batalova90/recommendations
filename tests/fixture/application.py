@@ -51,3 +51,8 @@ class Application:
             self.driver.get(
                     EnumURL.CATEGORIES_PAGE.value
             )
+
+    def open_create_review_page(self):
+        self.driver.get(
+                EnumURL.NEW_REVIEW.value
+        )

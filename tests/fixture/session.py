@@ -37,6 +37,7 @@ class SessionHelper:
         ).click()
 
     def is_logged_in_as(self, username):
+        self.app.open_admin_panel()
         return self.app.driver.find_element(
                 By.CSS_SELECTOR,
                 "strong"
@@ -44,10 +45,20 @@ class SessionHelper:
 
     def is_login(self):
         try:
-            self.app.driver.find_element(By.CSS_SELECTOR, "a:nth-child(4)")
+            self.app.driver.find_element(
+                    By.CSS_SELECTOR,
+                    "a:nth-child(4)"
+            )
             return True
         except:
-            return False
+            try:
+                self.app.driver.find_element(
+                        By.LINK_TEXT,
+                        "Выйти"
+                )
+                return True
+            except:
+                return False
 
     def ensure_login_admin(self, username, password):
         if self.is_login():
