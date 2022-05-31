@@ -1,19 +1,24 @@
 import pytest
+import json
+
 from fixture.application import Application
 
 
 fixture = None
+target = None
 
 @pytest.fixture
 def app(request):
     global fixture
+    global target
     browser = request.config.getoption("--browser")
-    if fixture is None:
+    if fixture is None or not fixture.is_valid():
         fixture = Application(browser=browser)
-    elif not fixture.is_valid():
-        fixture = Application(browser=browser)
-    username = request.config.getoption("--username")
-    password = request.config.getoption("--password")
+    if target is None:
+        with open(request.config.getoption("--target")) as config_file:
+            target = json.load(config_file)
+    username = target["username"]
+    password = target["password"]
     fixture.session.ensure_login_admin(
             username=username,
             password=password
@@ -31,5 +36,4 @@ def destroy(request):
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="firefox")
-    parser.addoption("--password", action="store", default="admin")
-    parser.addoption("--username", action="store", default="admin")
+    parser.addoption("--target", action="store", default="target.json")

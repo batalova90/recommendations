@@ -55,6 +55,7 @@ trio==0.20.0
 trio-websocket==0.9.2
 typing_extensions==4.2.0
 urllib3==1.26.7
+webdriver-manager==3.5.4
 whitenoise==5.3.0
 wsproto==1.1.0
 zipp==3.8.0

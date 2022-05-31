@@ -7,7 +7,6 @@ from django.core.paginator import Paginator
 from django.db.models import Avg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.views.decorators.cache import cache_page
 
 from cloudinary.forms import cl_init_js_callbacks
 
@@ -22,7 +21,6 @@ def get_page(request, paginator):
     return paginator.get_page(page_number)
 
 
-@cache_page(60 * 5)
 def index(request):
     latest = Reviews.objects.all()
     paginator = Paginator(latest, 8) # убрать потом посты в settings
@@ -46,18 +44,13 @@ def new_review(request):
     review_formset = ReviewForm(request.POST,
                                 files=request.FILES,
                                 prefix='review')
-    print(creation_formset, '\n\n')
-    print(review_formset, '\n\n', 'review')
-    print(request.POST)
     if creation_formset.is_valid() and review_formset.is_valid():
         new_review = review_formset.save(commit=False)
         try:
             creation = Creations.objects.get(name=creation_formset.cleaned_data.get('name'),
                                              category__id=creation_formset.cleaned_data.get('category').id)
             new_review.creation = creation
-            print('есть произведение')
         except ObjectDoesNotExist:
-            print('нет произведения')
             new_creation = creation_formset.save()
             new_review.creation = new_creation
         author, created = Authors.objects.get_or_create(author=request.user)
@@ -126,7 +119,6 @@ def review_edit(request, username, review_id):
                                  instance=creation,
                                  prefix='creation')
     if review_form.is_valid() and creation_form.is_valid():
-        #creation = creation_form.save()
         review = review_form.save(commit=False)
         review.pub_date = dt.today()
         review.save()
@@ -192,7 +184,6 @@ def add_review_raiting(request, username, review_id):
     if 'raiting' in  request.GET:
         author = get_object_or_404(Authors,
                                    author__username=username)
-        #клю ревью не проверен на существование
         review = author.reviews.get(id=review_id)
         if author.author == request.user:
             return redirect(review_view, username, review_id)
