@@ -1,4 +1,10 @@
 {
-   "username": "admin",
-   "password": "admin"
+   "web":{
+      "username": "admin",
+      "password": "admin"
+    },
+
+    "db": {
+       "host": "localhost"
+    }
 }

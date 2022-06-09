@@ -5,7 +5,11 @@ from data.add_review import testdata
 
 # надо удалять обзоры
 
-@pytest.mark.parametrize("review", testdata, ids=[repr(x) for x in testdata])
+@pytest.mark.parametrize(
+        "review",
+        testdata,
+        ids=[repr(x) for x in testdata]
+)
 def test_create_review(app, review):
     app.open_create_review_page()
     app.driver.find_element(
@@ -49,6 +53,7 @@ def test_create_review(app, review):
     app.driver.find_element(
             By.CSS_SELECTOR, ".btn"
     ).click()
+    app.driver.implicitly_wait(2)
     app.open_homepage()
     last_review_name = app.driver.find_element(
             By.CSS_SELECTOR,
@@ -56,3 +61,9 @@ def test_create_review(app, review):
     ).text
 
     assert review["review_name"] == last_review_name, "The review were not created"
+
+
+def test_matches_db_ui(app, db):
+    db_set = set(db.get_review_name())
+    testdata_set = set([x.get("review_name") for x in (testdata)])
+    assert testdata_set.issubset(db_set), "Database doesn't match test data"
