@@ -26,11 +26,12 @@ class DbFixture:
         list_review = []
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT * FROM reviews_reviews;")
+            cursor.execute("SELECT name FROM reviews_reviews;")
             for row in cursor:
-                list_review.append(row[1])
+                list_review.append(row[0])
         finally:
             cursor.close()
+        print(list_review)
         return list_review
 
     def get_creations_list(self):
@@ -39,7 +40,7 @@ class DbFixture:
             cursor = self.connection.cursor()
             cursor.execute("SELECT * FROM reviews_creations;").fetchall()
             for row in cursor:
-                creation_list.append(row)
+                creation_list.append(row[0])
         finally:
             cursor.close()
         return creation_list
